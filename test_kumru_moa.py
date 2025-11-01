@@ -10,8 +10,9 @@ def test_kumru_moa_integration():
     print("Testing Kumru-2B-Base-MHA with MoA Interface")
     print("=" * 60)
 
-    model_path = "/Users/eneskaranfil/Desktop/Sakarya/Kumru-2B-Base-MHA"
-
+    #model_path = "/Users/eneskaranfil/Desktop/Sakarya/Kumru-2B-Base-MHA"
+    
+    model_path = "/workspace/kumru-moa/Kumru-2B-Base-MHA"
     print(f"\n1. Loading MHA model from: {model_path}")
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
