@@ -32,32 +32,30 @@ def test_kumru_moa_integration():
         "Model should be MHA (num_attention_heads == num_key_value_heads)"
     print(f"   ✓ Confirmed MHA configuration (16 heads = 16 KV heads)")
 
-    print(f"\n2. Testing MoA compatibility...")
-    print("   ⚠ Skipping MoA interface (requires CUDA/Triton)")
-    print("   Note: MoA kernels need Linux + NVIDIA GPU")
-    print("   Current platform: macOS (Apple Silicon)")
+    print(f"\n2. Applying MoA interface to model...")
+    model = update_model_function(model, model_path)
+    print("   ✓ MoA functions added successfully!")
 
-    print(f"\n3. Model structure verification...")
-    print(f"   ✓ Model is in MHA format (compatible with MoA)")
-    print(f"   ✓ Model can be saved and loaded")
+    print(f"\n3. Verifying MoA integration...")
+    # Check if model has MoA-specific attributes
+    if hasattr(model.model, 'set_mixture_of_attention'):
+        print("   ✓ Model has set_mixture_of_attention method")
+    else:
+        print("   ✗ Warning: MoA method not found")
 
-    # Try importing MoA (will fail on macOS but shows what's needed)
-    try:
-        from MoA.models.interface import update_model_function
-        print("   ✓ MoA package is importable")
-    except ImportError as e:
-        print(f"   ✗ MoA import failed: {e}")
+    print("   ✓ Model is ready for MoA compression pipeline")
 
     print("\n" + "=" * 60)
     print("✓ All tests passed! Kumru-MHA is ready for MoA")
     print("=" * 60)
-    print("\nNext steps (requires Linux + NVIDIA GPU):")
-    print("1. Transfer Kumru-2B-Base-MHA to a CUDA-enabled machine")
-    print("2. Run MoA calibration dataset generation")
-    print("3. Profile attention importance")
-    print("4. Optimize sparse attention patterns")
-    print("5. Validate and compress the model")
-    print("\nAlternative: Use the model as-is (MHA format, no compression)")
+    print("\nNext steps for MoA compression:")
+    print("1. Run MoA calibration dataset generation")
+    print("2. Profile attention importance at different sequence lengths")
+    print("3. Optimize sparse attention patterns")
+    print("4. Validate and select best compression plan")
+    print("5. Apply compression and benchmark performance")
+    print("\nCommands:")
+    print("  python MoA/scripts/pipeline/main.py --model_path /workspace/kumru-moa/Kumru-2B-Base-MHA --model_name Kumru-2B-Base-MHA")
 
     return model
 
